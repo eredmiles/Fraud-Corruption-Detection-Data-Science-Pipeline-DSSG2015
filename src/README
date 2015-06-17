@@ -1,0 +1,69 @@
+This directory contains the following files:
+    1) data_exploration_script.py - used to view data file details.    
+    2) data_cleaning_script.py - used to clean data files.
+    3) excel_file_append_script.py - used to append similar excel files.
+
+1) Data_exploration_script.py can be used to view data file details.
+   ---Functionality---
+   This script will provide the following information:
+	names and types of all columns
+	length of table (number of rows)
+	for each column:
+	   number of unique values, percentage of values that are missing
+	   for numerics: Min, Max, Mean, Median, Std
+           for dates: date range
+   
+   ---Arguments---
+   Display file details to standard output
+   -f file name - the full path and name for the file to preview
+   -s the number of rows to skip at the top of the file; default 0
+   -e the number of example entries of each column you want to output; default 2
+   -d the columns which contain dates; provided as a list e.g. -d 17,19; default empty
+   -n the additional values that should be parsed as nan; provided as a list
+   e.g. -n "#,NC" where both values will become nan when output; default empty
+   
+   ---Example commands---
+   # view the data - specify that there are three rows at the top of the file 
+   # which should be ignored
+	python data_exploration_script.py -f [full path and file name] -s 3
+	
+	#view the data and make sure date columns are detected and all nans are considered
+       python data_exploration_script.py -f [full path and file name] -s 7 -d 16,17,18 -n "#,NC"
+
+2) The data_cleaning_script.py can be used to clean your data.
+
+   ---Functionality---
+      This script will create a new, cleaned, csv file as follows:
+         dates specified will be converted to date times if possible
+         values given will be converted to fans
+         columns given will be removed from the file
+         columns given will be renamed as specified
+   ---Arguments---
+   -f name of file to clean
+   -s to skip that number of rows for all files
+   -d column numbers of columns that contain dates
+   -n values that should be considered nans
+   -x columns to drop
+   -r columns to rename, give list [oldname],[newname],[oldname],[newname]
+   -o full path and name of file to which to write, .csv extension will automatically be added
+   for example Unnamed: 5,Project Name to rename the column Unnamed: 5 to Project Name
+
+   ---Example Commands---
+   python data_cleaning_script.py -f [full path/filename] -d 3 -n '#,NC' -x 0,1,2,3,6,7,8,9,10,11,13,16,19 -r "Total Contract Amount (USD),Amount" -o /home/new_cleaned_contracts_incl_supplier
+
+
+
+3) If you have multiple excel files with the same columns and you would like to append this data together into one file (with one master heading) you can use the excel_file_append_script.py
+    ---Functionality---
+        This script will create a new csv file with all the data from the excel files in the given directory appended together. By default this file will be named _consolidated.csv and will be placed in the directory given for file appending.
+    ---Arguments---
+    -d directory name
+    -sl list of rows to skip for each file in order
+    e.g. if you have file a.xls and b.xls in the directory, you would do -sl 1,2    to skip 1 row for a.xls and 2 rows for b.xls
+    -s to skip that number of rows for all files
+    
+    ---Example Commands---
+    python excel_file_append_script.py -d [directory containing excel files] -sl 6,7,8,6,6
+
+AUTHORSHIP
+These files were created during the Summer 2015 Data Science for Social Good Fellowship by Emily Grace, Ankit Rai, and Elissa Redmiles. See individual files for individual authorship attributions. See: dssg.io for more information.
