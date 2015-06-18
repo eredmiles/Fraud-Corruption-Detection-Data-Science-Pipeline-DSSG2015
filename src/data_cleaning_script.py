@@ -14,8 +14,6 @@ import numpy
 # -n values that should be considered nans
 # -x columns to drop
 # -r columns to rename, give list [oldname],[newname],[oldname],[newname]
-# -o full path and name of file to which to write, .csv extension will
-#    automatically be added
 # for example Unnamed: 5,Project Name to rename the column Unnamed: 5 to Project Name
 
 parser = argparse.ArgumentParser()
@@ -93,7 +91,7 @@ df.convert_objects(convert_numeric=True).dtypes
 if dates is not "":
     for index in dates:
        df = df[df.ix[:,index].str.contains("/|-")==True]    
-        if not(df.dtypes[index] in ['datetime64','datetime64[ns]']):
+       if not(df.dtypes[index] in ['datetime64','datetime64[ns]']):
               try:
                   df.ix[:,index] = pd.to_datetime(df.ix[:,index], 
 					errors='raise',coerce=True,
@@ -113,8 +111,7 @@ if dates is not "":
 					errors='raise', coerce=True,
 					 format='%m-%d-%Y')
 #if amount is of the format \$[^0-9]* convert to numeric
-if df['amount'].dtypes not in ['float64', 'float32']:
-   df['amount']  = df['amount'].map(lambda x: float(str(x)[1:]) 
+if df['amount'].dtypes not in ['int64', 'int32', 'float64', 'float32']:
+   df['amount']  = df['amount'].map(lambda x:float(str(x)[1:]) 
 			if not(pd.isnull(x)) else None)
-   
 df.to_csv(args.output_file+".csv") 
