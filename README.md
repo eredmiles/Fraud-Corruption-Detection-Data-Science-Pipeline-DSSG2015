@@ -1,8 +1,9 @@
 #PIPELINE FOR DETECTION FRAUD CORRUPTION AND COLLUSION IN WORLD BANK CONTRACTS
 
 ##Setup Instructions
-- Git clone [url]
-You will run full_pipeline.sh to do EVERYTHING!
+- Git clone this repo.
+
+You will run full_pipeline.sh to do EVERYTHING! More information in WorldBank2015/Code/data_pipeline_src/README.md
 
 - Install Anaconda python (see instructions [here](http://docs.continuum.io/anaconda/install#linux-install)
 - Setup PostgreSQL database:
