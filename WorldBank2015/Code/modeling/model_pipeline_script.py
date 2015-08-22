@@ -83,7 +83,8 @@ def get_engine():
     config.read('config')
     password = config.get('SQL','password')
 
-    engine = create_engine(r'postgresql://world_bank:' + password + '@dssgsummer2014postgres.c5faqozfo86k.us-west-2.rds.amazonaws.com/world_bank')
+    engine = create_engine(r'postgresql://dssg:' + password + '@localhost/world_bank')
+
 
     return engine
 

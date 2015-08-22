@@ -51,7 +51,7 @@ def connect():
     password = config.get('SQL','password')
 
     #open connection with database
-    con = psycopg2.connect(host="dssgsummer2014postgres.c5faqozfo86k.us-west-2.rds.amazonaws.com",user='world_bank',password=password,dbname="world_bank")
+    con = psycopg2.connect(host="localhost",user='dssg',password=password,dbname="world_bank")
 
     return con
 

@@ -39,7 +39,7 @@ def connect():
     password = config.get('SQL','password')
 
 
-    con = psycopg2.connect(host="dssgsummer2014postgres.c5faqozfo86k.us-west-2.rds.amazonaws.com",user='world_bank',password=password,dbname="world_bank")
+    con = psycopg2.connect(host="localhost",user='dssg',password=password,dbname="world_bank")
 
     return con
 
@@ -214,7 +214,7 @@ def get_engine():
     config.read('config')
     password = config.get('SQL','password')
 
-    engine = create_engine(r'postgresql://world_bank:' + password + '@dssgsummer2014postgres.c5faqozfo86k.us-west-2.rds.amazonaws.com/world_bank')
+    engine = create_engine(r'postgresql://dssg:' + password + '@localhost/world_bank')
 
     return engine
 
@@ -544,7 +544,8 @@ def main():
                                             total=tagg,
                                             table_name2=table_name)
             result = con.execute(sql_statement)
-            sql_results = pd.DataFrame(result.fetchall())
+            print result
+	    sql_results = pd.DataFrame(result.fetchall())
             sql_results.columns = result.keys()
              
             for col in sql_results.columns:

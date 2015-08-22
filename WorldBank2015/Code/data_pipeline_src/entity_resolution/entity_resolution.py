@@ -12,6 +12,7 @@ def main():
 
 
     contracts = pd.read_csv(args.contracts_file_name)
+    print contracts.shape
     entity_resolver = pd.read_csv(args.canonincal_entity_file_name, delimiter='\t')
 
     entity_resolver = entity_resolver[['Entity Name','Canonical Name (Semantic)']]
@@ -64,6 +65,6 @@ def main():
     contracts['supplier'] = contracts['resolved_supplier']
     contracts.to_csv(args.output_file)
   #  entity_resolver.to_csv('./entity_resolver.csv')
-
+    print contracts.shape
 if __name__ == '__main__':
     main()

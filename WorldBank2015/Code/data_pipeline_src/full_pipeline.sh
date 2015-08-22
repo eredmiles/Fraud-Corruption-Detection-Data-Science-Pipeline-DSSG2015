@@ -1,13 +1,11 @@
 #!/bin/bash  
 #Elissa Redmiles DSSG2015
-source ~/.pgpass
-
 #Command outputs are located in pipeline.log
 
-LOCALPATH='/home/eredmiles'
-DATA_STORAGE='/mnt/data/world-bank/pipeline_data'
-CURRENCY_FILE_PPP='/mnt/data/world-bank/ppp.csv'
-CURRENCY_FILE_FCRF='/mnt/data/world-bank/fcrf.csv'
+LOCALPATH='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015'
+DATA_STORAGE='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015/pipeline_data'
+CURRENCY_FILE_PPP='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015/pipeline_data/ppp.csv'
+CURRENCY_FILE_FCRF='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015/pipeline_data/fcrf.csv'
 echo Starting DSSG2015 World Bank Complaint Ranking Pipeline
 ### Data Loading ###
 ## Contracts ##
@@ -17,11 +15,7 @@ echo ================================================================= >pipeline
 echo Downloading newest contracts data set from finances.worldbank.org. >>pipeline.log
 echo ================================================================= >>pipeline.log
 CONTRACTS_FILE=$DATA_STORAGE'/latest_contract_web_download.csv'
-wget -qO pipeline.log --output-document=$CONTRACTS_FILE https://finances.worldbank.org/api/views/kdui-wcs3/rows.csv?accessType=DOWNLOAD >> pipeline.log
-wget -q0 pipeline.log --output-document=$CURRENCY_FILE_FCRF http://api.worldbank.org/v2/en/indicator/pa.nus.fcrf?downloadformat=csv >> pipeline.log
-#Downloading Currency Conversion Files
-wget -q0 pipeline.log --output-document=$CURRENCY_FILE_PPP http://api.worldbank.org/v2/en/indicator/pa.nus.ppp?downloadformat=csv >>pipeline.log
-wget -
+wget --output-document=$CONTRACTS_FILE https://finances.worldbank.org/api/views/kdui-wcs3/rows.csv?accessType=DOWNLOAD >> pipeline.log
 
 #Cleaning the contracts: formating dates, renaming columns, properly coding null values
 echo Cleaning contracts data set
@@ -50,12 +44,12 @@ echo ================================================================= >>pipelin
 
 CONTRACTS_TABLE='latest_contract_web_download_cleaned_resolved'
 echo drop table \"$CONTRACTS_TABLE\"';' > droptable.sql
-psql -f droptable.sql >> pipeline.log 2>> pipeline.log
+psql world_bank -f droptable.sql >> pipeline.log 2>> pipeline.log
 csvsql -i postgresql $ENTITY_RESOLVED_CONTRACTS_FILE > createtable.sql
 #';'>>createtable.sql
-psql -f createtable.sql >> pipeline.log 2>> pipeline.log 
+psql world_bank -f createtable.sql >> pipeline.log 2>> pipeline.log 
 echo \\copy \"$CONTRACTS_TABLE\" FROM \'$ENTITY_RESOLVED_CONTRACTS_FILE\' CSV HEADER\; > copydata.sql
-psql -f copydata.sql >> pipeline.log 2>> pipeline.log
+psql world_bank -f copydata.sql >> pipeline.log 2>> pipeline.log
 
 ## Projects ##
 #Getting project data from World Bank Website which will later be joined with the contracts data
@@ -66,7 +60,7 @@ echo Loading contracts data set into database. >>pipeline.log
 echo ================================================================= >>pipeline.log
 
 PROJECTS_FILE=$DATA_STORAGE'/project_data.csv'
-wget -qO pipeline.log http://search.worldbank.org/api/projects/all.csv -O $PROJECTS_FILE >> pipeline.log
+wget http://search.worldbank.org/api/projects/all.csv -O $PROJECTS_FILE >> pipeline.log
 
 #Cleaning the project data
 echo Cleaning projects data set.
@@ -75,7 +69,6 @@ echo Cleaning projects data set.
 echo ================================================================= >>pipeline.log
 echo Cleaning projects data set  >>pipeline.log
 echo ================================================================= >>pipeline.log
-
 
 
 
@@ -91,11 +84,11 @@ echo ================================================================= >>pipelin
 
 PROJECTS_TABLE='project_data'
 echo drop table \"$PROJECTS_TABLE\"';' > droptable.sql
-psql -f droptable.sql >> pipeline.log 2>> pipeline.log
+psql world_bank -f droptable.sql >> pipeline.log 2>> pipeline.log
 csvsql -i postgresql $PROJECTS_FILE > createtable.sql
-psql -f createtable.sql >> pipeline.log 2>> pipeline.log
+psql world_bank -f createtable.sql >> pipeline.log 2>> pipeline.log
 echo \\copy \"$PROJECTS_TABLE\" FROM \'$PROJECTS_FILE\' CSV HEADER';' > copydata.sql
-psql -f copydata.sql >> pipeline.log 2>> pipeline.log
+psql world_bank -f copydata.sql >> pipeline.log 2>> pipeline.log
 
 #Joining Project data and Contracts data
 
@@ -106,17 +99,17 @@ echo ================================================================= >>pipelin
 
 JOINED_TABLE='contracts_wprojects'
 echo DROP TABLE $JOINED_TABLE';'>droptable.sql
-psql -f droptable.sql >> pipeline.log 2>> pipeline.log
+psql world_bank -f droptable.sql >> pipeline.log 2>> pipeline.log
 echo "ALTER TABLE $CONTRACTS_TABLE DROP COLUMN _unnamed;">dropcolumn.sql
-psql -f dropcolumn.sql >> pipeline.log 2>> pipeline.log
+psql world_bank -f dropcolumn.sql >> pipeline.log 2>> pipeline.log
 echo "ALTER TABLE $PROJECTS_TABLE DROP COLUMN _unnamed;">dropcolumn.sql
-psql -f dropcolumn.sql >> pipeline.log 2>> pipeline.log
+psql world_bank -f dropcolumn.sql >> pipeline.log 2>> pipeline.log
 echo "AlTER TABLE $PROJECTS_TABLE DROP COLUMN project_name;">dropcolumn.sql
-psql -f dropcolumn.sql >> pipeline.log 2>> pipeline.log
+psql world_bank -f dropcolumn.sql >> pipeline.log 2>> pipeline.log
 echo "AlTER TABLE $PROJECTS_TABLE DROP COLUMN country;">dropcolumn.sql
-psql -f dropcolumn.sql >> pipeline.log 2>> pipeline.log
+psql world_bank -f dropcolumn.sql >> pipeline.log 2>> pipeline.log
 echo "CREATE TABLE $JOINED_TABLE AS SELECT * FROM $CONTRACTS_TABLE LEFT JOIN $PROJECTS_TABLE ON ($CONTRACTS_TABLE.project_id = $PROJECTS_TABLE.id);" > joinprojectdata.sql
-psql -f joinprojectdata.sql>> pipeline.log 2>> pipeline.log
+psql world_bank -f joinprojectdata.sql>> pipeline.log 2>> pipeline.log
 
 ## Feature Generation ##
 #Generate contracts features
@@ -133,12 +126,12 @@ echo Merging contracts, projects and investigations data sets.
 echo ================================================================= >>pipeline.log
 echo labeleing data  >>pipeline.log
 echo ================================================================= >>pipeline.log
-LABELS_FILE=$DATA_STORAGE'/complaint_case_projects_and_contracts_20150727_115323.csv'
+LABELS_FILE=$DATA_STORAGE'/investigations.csv'
 echo Investigations file being used: $LABELS_FILE
 echo Last Modification Date for Investigations File:
-stat -c %y /mnt/data/world-bank/pipeline_data/complaint_case_projects_and_contracts_20150727_115323.csv
+stat -c %y $LABELS_FILE
 
-UTF8_LABELS_FILE=$DATA_STORAGE'/utf8_new_complaint_data_20150727.csv'
+UTF8_LABELS_FILE=$DATA_STORAGE'/utf8_investigations.csv'
 iconv -f utf-8 -t ascii -c $LABELS_FILE -o $UTF8_LABELS_FILE >> pipeline.log
 python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/data_cleaning_generic.py' -f $UTF8_LABELS_FILE -o $UTF8_LABELS_FILE >> pipeline.log
 
@@ -148,6 +141,21 @@ echo merging contracts, features labels  >>pipeline.log
 echo ================================================================= >>pipeline.log
 LABELED_CONTRACTS_FEATURE_GEN_1=$DATA_STORAGE'/labeled_contracts_cleaned_resolved_feature_gen_1.csv'
 python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/label.py' -c $FEATURE_GEN_1_FILE -i $UTF8_LABELS_FILE -wf $LABELED_CONTRACTS_FEATURE_GEN_1 >> pipeline.log
+
+#importing labeled feature gen 1 file to database
+echo ================================================================= >>pipeline.log
+echo Loading labeled feature gen 1 data set  >>pipeline.log
+echo ================================================================= >>pipeline.log
+
+LABELED_FEATURES_TABLE='labeled_contracts_cleaned_resolved_feature_gen_1'
+echo drop table \"$LABELED_FEATURES_TABLE\"';' > droptable.sql
+psql world_bank -f droptable.sql >> pipeline.log 2>> pipeline.log
+csvsql -i postgresql $LABELED_CONTRACTS_FEATURE_GEN_1 > createtable.sql
+psql world_bank -f createtable.sql >> pipeline.log 2>> pipeline.log
+echo \\copy \"$LABELED_FEATURES_TABLE\" FROM \'$LABELED_CONTRACTS_FEATURE_GEN_1\' CSV HEADER';' > copydata.sql
+psql world_bank -f copydata.sql >> pipeline.log 2>> pipeline.log
+
+
 
 #Generating supplier features for allegations
 echo Generating supplier features for allegations data set.

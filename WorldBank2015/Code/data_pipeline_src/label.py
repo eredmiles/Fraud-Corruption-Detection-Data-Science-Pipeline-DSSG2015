@@ -16,7 +16,10 @@ if '.csv' in args.investigations_data:
     labels=pd.read_csv(args.investigations_data, low_memory=False)
 if '.xls' in args.investigations_data:
     labels = pd.read_excel(args.investigations_data, low_memory=False)
-
+print contracts.shape
+print contracts['wb_contract_number']
+print labels.shape
+print labels.columns
 #print 'Contracts: ',len(contracts.index)
 #print 'Labels: ', len(labels.index)
 #print 'Num unique contracts: ', contracts.shape
@@ -58,9 +61,14 @@ just_unfound  = labels[(labels['outcome_val'] == 0)]
 #print "percent unsubstantiated: ", str(float(len(just_unsubst.index))/float(len(labels.index)))
 #print "percent unfounded ", str(float(len(just_unfound.index))/float(len(labels.index)))
 contracts['wb_contract_number']=contracts['wb_contract_number'].map(lambda x: np.int_(x))
+print contracts['wb_contract_number']
 cols_to_use = labels.columns - contracts.columns
 
 merged = contracts.merge(labels[cols_to_use], left_on=['wb_contract_number'], right_on=['wb_id'])
+print labels['wb_id']
+print labels.shape
+print contracts.shape
+print merged.shape
 #print merged['wb_id'].nunique()
 #print merged['supplier'].nunique()
 #merged=merged.drop_duplicates()
@@ -74,23 +82,19 @@ just_unfound  = merged[(merged['outcome_val'] == 0)]
 #print "percent substantiated: ", str(float(len(just_subst.index))/float(len(merged.index)))
 #print "percent unsubstantiated: ", str(float(len(just_unsubst.index))/float(len(merged.index)))
 #print "percent unfounded ", str(float(len(just_unfound.index))/float(len(merged.index)))
-subset = merged[(pd.notnull(merged['allegation_outcome']))]
+#subset = merged[(pd.notnull(merged['allegation_outcome']))]
 #print subset['wb_id'].nunique()
 #print subset['supplier'].nunique()
 #print subset['supplier']
-subset= subset[['supplier','allegation_outcome','allegation_category']]
-subset_w_dummies=pd.get_dummies(subset,columns=['allegation_outcome'])
-subset_w_dummies=subset_w_dummies.groupby(['supplier'])
+#subset= subset[['supplier','allegation_outcome','allegation_category']]
+#subset_w_dummies=pd.get_dummies(subset,columns=['allegation_outcome'])
+#subset_w_dummies=subset_w_dummies.groupby(['supplier'])
 #print subset_w_dummies.head()
-count=subset_w_dummies.count()
-print count
-count.to_csv('/mnt/data/world-bank/count_by_supplier.csv')
-subset_w_dummies=subset_w_dummies.sum()
+#count=subset_w_dummies.count()
+#subset_w_dummies=subset_w_dummies.sum()
 #subset_w_dummies=subset_w_dummies
-subset_w_dummies=subset_w_dummies.apply(lambda x: 100.0*x/x.sum(), axis=1)
+#subset_w_dummies=subset_w_dummies.apply(lambda x: 100.0*x/x.sum(), axis=1)
 #subset_w_dummies=pd.get_dummies(subset_w_dummies['allegation_outcome'])
-print subset_w_dummies
-subset_w_dummies.to_csv('/mnt/data/world-bank/percent_labels_by_supplier.csv')
-#print len(subset.index)
+#print subset_w_dummies
 #subset.to_csv('/mnt/data/world-bank/pipeline_data/labels.csv')
 merged.to_csv(args.output_file)

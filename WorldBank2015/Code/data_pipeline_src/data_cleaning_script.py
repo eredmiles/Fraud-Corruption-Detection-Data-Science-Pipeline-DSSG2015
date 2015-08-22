@@ -70,6 +70,7 @@ if '.xls' in input_file:
 #print len(df.index)
 #print df.shape
 #remove duplicates
+print df.shape
 df = df.drop_duplicates()
 #print len(df.index)
 #print df.shape
@@ -135,5 +136,5 @@ print df['supplier']
 #df=util.fix_country_names(df)   
 filename=args.output_file
 df.to_csv(filename)#, encoding='utf-8') 
-
+print df.shape
 

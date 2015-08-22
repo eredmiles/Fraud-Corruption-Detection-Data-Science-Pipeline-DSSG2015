@@ -20,7 +20,7 @@ def main():
     parser.add_argument('-p', '--proc_col_name', help='name of the column that contains procurement method', default='proc_meth')
     parser.add_argument('-wf','--output_file',default="",help='full path and file name without extension where file should be written')
     parser.add_argument('-ppp','--ppp_file',default="/mnt/data/world-bank/ppp.csv", help='path to currency conversion files')
-     parser.add_argument('-ppp','--fcrf_file',default="/mnt/data/world-bank/fcrf.csv", help='path to currency conversion files')
+    parser.add_argument('-fcrf','--fcrf_file',default="/mnt/data/world-bank/fcrf.csv", help='path to currency conversion files')
     args = parser.parse_args()
 
     input_file = args.file_name
@@ -37,7 +37,7 @@ def main():
     df.drop(df.columns[0],axis=1,inplace=True)
 
     if 'amount_standardized' not in df.columns:
-       df = standardize_amount(df)
+       df = standardize_amount(df, args.ppp_file,args.fcrf_file)
 
 
     #collapse rows that are identical except in amount 
@@ -62,7 +62,7 @@ def main():
     #write to output file
     if args.output_file is not "":
         df.to_csv(args.output_file) 
-
+    print df.shape
 
 def proportion_of_project(data):
 
@@ -128,9 +128,9 @@ def is_competitive(x):
         return None
 
 #Rescale contract $ amount to account for inflation
-def standardize_amount(data):
-    ppp_data = pd.read_csv(str(args.ppp_file),skiprows=2)
-    currency_convert_data = pd.read_csv(str(args.fcrf_file),skiprows=0,low_memory=False)
+def standardize_amount(data, ppp_file, fcrf_file):
+    ppp_data = pd.read_csv(ppp_file,skiprows=2)
+    currency_convert_data = pd.read_csv(fcrf_file,skiprows=0,low_memory=False)
     print currency_convert_data.columns
     ppp_data = currency.clean_world_bank_data(ppp_data,'ppp')
     currency_convert_data = currency.clean_world_bank_data(currency_convert_data,'currency_convert')
