@@ -37,4 +37,4 @@ NOTE: This is also where all output files will be stored.
     - you must create a config file in the directory from which you will run the script.
 
 #Code Authors
-Emily Grace (emily.grace.eg@gmail.com), Ankit Rai (), Elissa Redmiles (eredmiles@cs.umd.edu). [DSSG](https://dssg.io)2015.
+Emily Grace (emily.grace.eg@gmail.com), Ankit Rai (rai5@illinois.edu), Elissa Redmiles (eredmiles@cs.umd.edu). [DSSG](https://dssg.io)2015.
