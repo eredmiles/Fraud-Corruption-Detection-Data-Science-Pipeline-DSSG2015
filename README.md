@@ -1,5 +1,6 @@
 #SETUP INSTRUCTIONS
-- Git clone [url]
+- Git clone https://github.com/eredmiles/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015.git
+- 
 You will run full_pipeline.sh to do EVERYTHING!
 
 - Install Anaconda python (see instructions [here](http://docs.continuum.io/anaconda/install#linux-install)
@@ -15,7 +16,7 @@ NOTE: Install Python 2.7 NOT Python 3.X
 
 ###Required Files
 - The investigations file must be saved as a .csv file. Further, it must be named investigations.csv
-- Download the zip file from here: , save the ppp file within as ppp.csv in pipeline_data (or your DATA_STORAGE variable location, see below). Do the same for the zip file from here: , save the fcrf file as fcrf.csv
+- Download the zip file from here: http://data.worldbank.org/indicator/PA.NUS.PPP, save the ppp file within as ppp.csv in pipeline_data (or your DATA_STORAGE variable location, see below). Do the same for the zip file from here: http://data.worldbank.org/indicator/PA.NUS.FCRF, save the fcrf file as fcrf.csv
 
 
 ###Modify full_pipeline.sh as follows:
