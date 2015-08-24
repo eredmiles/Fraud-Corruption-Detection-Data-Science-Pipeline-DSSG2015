@@ -1,7 +1,7 @@
 #!/bin/bash  
 #Elissa Redmiles DSSG2015
 #Command outputs are located in pipeline.log
-
+ 
 LOCALPATH='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015'
 DATA_STORAGE='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015/pipeline_data'
 CURRENCY_FILE_PPP='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015/pipeline_data/ppp.csv'
@@ -11,10 +11,6 @@ PATH_TO_SUPPLIER_FEATURE_GEN=$LOCALPATH'/WorldBank2015/Code/data_pipeline_src/su
 
 echo Starting DSSG2015 World Bank Complaint Ranking Pipeline
 
-#Setting Python Path
-export PATH="/home/dssg/anaconda/bin":$PATH
-export PYTHONPATH="/home/dssg/anaconda":$PYTHONPATH
-echo $PYTHONPATH
 ### Data Loading ###
 ## Contracts ##
 #Download a new set of contracts from the World Bank Website 
