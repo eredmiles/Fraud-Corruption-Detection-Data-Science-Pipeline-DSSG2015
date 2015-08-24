@@ -16,7 +16,9 @@ NOTE: Install Python 2.7 NOT Python 3.X
 
 ###Required Files
 - The investigations file must be saved as a .csv file. Further, it must be named investigations.csv
+- Canonical entity resolution file already included in pipeline_data (canonicalFileV2.csv)
 - Download the zip file from here: http://data.worldbank.org/indicator/PA.NUS.PPP, save the ppp file within as ppp.csv in pipeline_data (or your DATA_STORAGE variable location, see below). Do the same for the zip file from here: http://data.worldbank.org/indicator/PA.NUS.FCRF, save the fcrf file as fcrf.csv
+    - A 2015 version of these files is present in pipeline_data as ppp.csv and fcrf.csv
 
 
 ###Modify full_pipeline.sh as follows:
@@ -34,7 +36,5 @@ NOTE: This is also where all output files will be stored.
     - you must also modify model_pipeline_script.py (line 86) and supplier_feature_gen.py (line 217): create_engine(r'postgresql://[USER_NAME]:'+password+'localhost/DATABASE'. e.g. create_engine(r'postgresql://dssg:'+password+'localhost/world_bank'
     - you must create a config file in the directory from which you will run the script.
 
-
-
-##Author
-Elissa Redmiles (eredmiles@cs.umd.edu). DSSG2015.
+#Code Authors
+Emily Grace (emily.grace.eg@gmail.com), Ankit Rai (), Elissa Redmiles (eredmiles@cs.umd.edu). [DSSG](https://dssg.io)2015.
