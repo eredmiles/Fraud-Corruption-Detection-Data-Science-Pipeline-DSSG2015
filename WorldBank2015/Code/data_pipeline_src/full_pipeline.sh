@@ -8,10 +8,6 @@ CURRENCY_FILE_PPP='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipel
 CURRENCY_FILE_FCRF='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015/pipeline_data/fcrf.csv'
 echo Starting DSSG2015 World Bank Complaint Ranking Pipeline
 
-#Setting Python Path
-export PATH="/home/dssg/anaconda/bin":$PATH
-export PYTHONPATH="/home/dssg/anaconda":$PYTHONPATH
-echo $PYTHONPATH
 ### Data Loading ###
 ## Contracts ##
 #Download a new set of contracts from the World Bank Website 
