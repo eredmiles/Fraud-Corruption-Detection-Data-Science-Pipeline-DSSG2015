@@ -16,21 +16,23 @@ if '.csv' in args.investigations_data:
     labels=pd.read_csv(args.investigations_data, low_memory=False)
 if '.xls' in args.investigations_data:
     labels = pd.read_excel(args.investigations_data, low_memory=False)
+print 'contracts shape: '
 print contracts.shape
-print contracts['wb_contract_number']
+#print contracts['wb_contract_number']
+print 'labels shape: '
 print labels.shape
-print labels.columns
-#print 'Contracts: ',len(contracts.index)
-#print 'Labels: ', len(labels.index)
+#print labels.columns
+print 'Contracts: ',len(contracts.index)
+print 'Labels: ', len(labels.index)
 #print 'Num unique contracts: ', contracts.shape
 #print 'Num unique labels: ', labels.shape
-#labels = labels.drop_duplicates()
+labels = labels.drop_duplicates()
 #print 'Labels: ', len(labels.index)
 labels = labels[(labels['allegation_outcome'] == 'Substantiated') |
                           (labels['allegation_outcome'] == 'Unfounded') | 
                          (labels['allegation_outcome'] == 'Unsubstantiated') |
 			(pd.isnull(labels['allegation_outcome']))]
-#print 'Num with labels: ', len(labels.index)
+print 'Num with labels: ', len(labels.index)
 labels=labels[labels['wb_id'].apply(lambda x: str(x).isdigit())]
 #labels['wb_id']=labels['wb_id'].filter(lambda x: x.isdigit())
 #print labels['wb_id']
@@ -61,13 +63,17 @@ just_unfound  = labels[(labels['outcome_val'] == 0)]
 #print "percent unsubstantiated: ", str(float(len(just_unsubst.index))/float(len(labels.index)))
 #print "percent unfounded ", str(float(len(just_unfound.index))/float(len(labels.index)))
 contracts['wb_contract_number']=contracts['wb_contract_number'].map(lambda x: np.int_(x))
-print contracts['wb_contract_number']
+#print contracts['wb_contract_number']
 cols_to_use = labels.columns - contracts.columns
 
 merged = contracts.merge(labels[cols_to_use], left_on=['wb_contract_number'], right_on=['wb_id'])
-print labels['wb_id']
+print 'num unique wbid labels: '+str(labels['wb_id'].nunique())
+print 'num unique contracts: '+str(contracts['wb_contract_number'].nunique())
+print 'labels shape: '
 print labels.shape
+print 'contracts shape: '
 print contracts.shape
+print 'merged shape: '
 print merged.shape
 #print merged['wb_id'].nunique()
 #print merged['supplier'].nunique()

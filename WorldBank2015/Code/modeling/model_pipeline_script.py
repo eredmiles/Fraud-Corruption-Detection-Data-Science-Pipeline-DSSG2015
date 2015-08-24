@@ -439,12 +439,19 @@ def plot_roc_curve(y_test,y_proba,ax):
 
 def select_features(labelled_data,col_group_dict,col_set):
 
-
+        
         col_selection_temp = []
         for cset in col_set:
             if cset in col_group_dict.keys():
-                col_selection_temp += col_group_dict[cset]
-
+        	print col_selection_temp
+		print len(col_group_dict[cset])
+                print 'cset: ',cset
+		print 'new_cols: ',col_group_dict[cset]
+                try:
+                    col_selection_temp += col_group_dict[cset].tolist()
+                except:
+                    col_selection_temp += col_group_dict[cset]
+                print 'all cols: ', col_selection_temp
 
         col_selection = []
         for col in col_selection_temp:
@@ -612,7 +619,7 @@ def define_feature_sets(col_group_dict):
                                   'procurement_category',
                                   'procurement_type',
                                   'project_proportion',
-                                  'amount_standardized'
+                                  'amount_standardized',
                                   'procument_method',
                                   'objective',
                                   'competitive',

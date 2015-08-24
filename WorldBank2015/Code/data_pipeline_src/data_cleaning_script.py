@@ -72,6 +72,9 @@ if '.xls' in input_file:
 #remove duplicates
 print df.shape
 df = df.drop_duplicates()
+cols_to_drop = [col for col in df.columns if 'nnamed' in col]
+cols_to_keep = df.columns - cols_to_drop
+df= df[cols_to_keep]
 #print len(df.index)
 #print df.shape
 

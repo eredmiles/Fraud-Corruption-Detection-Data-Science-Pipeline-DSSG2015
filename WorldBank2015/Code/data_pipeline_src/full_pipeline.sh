@@ -15,7 +15,7 @@ echo ================================================================= >pipeline
 echo Downloading newest contracts data set from finances.worldbank.org. >>pipeline.log
 echo ================================================================= >>pipeline.log
 CONTRACTS_FILE=$DATA_STORAGE'/latest_contract_web_download.csv'
-wget --output-document=$CONTRACTS_FILE https://finances.worldbank.org/api/views/kdui-wcs3/rows.csv?accessType=DOWNLOAD >> pipeline.log
+#wget --output-document=$CONTRACTS_FILE https://finances.worldbank.org/api/views/kdui-wcs3/rows.csv?accessType=DOWNLOAD >> pipeline.log
 
 #Cleaning the contracts: formating dates, renaming columns, properly coding null values
 echo Cleaning contracts data set
@@ -23,7 +23,7 @@ echo ================================================================= >>pipelin
 echo Cleaning contracts data set >>pipeline.log
 echo ================================================================= >>pipeline.log
 CLEANED_CONTRACTS_FILE=$DATA_STORAGE'/latest_contract_web_download_cleaned.csv'
-python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/data_cleaning_script.py' -f $CONTRACTS_FILE -n '#' -r "Borrower Country,country,Total Contract Amount (USD),amount" -o $CLEANED_CONTRACTS_FILE >> pipeline.log
+#python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/data_cleaning_script.py' -f $CONTRACTS_FILE -n '#' -r "Borrower Country,country,Total Contract Amount (USD),amount" -o $CLEANED_CONTRACTS_FILE >> pipeline.log
 
 #Entity Resolution Application
 echo Resolving entities in contracts data set.
@@ -33,7 +33,7 @@ echo Resolving entities in contracts data set. >>pipeline.log
 echo ================================================================= >>pipeline.log
 CANONICAL_FILE=$DATA_STORAGE'/canonicalNamesV2.csv'
 ENTITY_RESOLVED_CONTRACTS_FILE=$DATA_STORAGE'/latest_contract_web_download_cleaned_resolved.csv'
-python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/entity_resolution/entity_resolution.py' -c $CLEANED_CONTRACTS_FILE -e $CANONICAL_FILE -o $ENTITY_RESOLVED_CONTRACTS_FILE >> pipeline.log
+#python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/entity_resolution/entity_resolution.py' -c $CLEANED_CONTRACTS_FILE -e $CANONICAL_FILE -o $ENTITY_RESOLVED_CONTRACTS_FILE >> pipeline.log
 
 #Loading contract data into PostgreSQL database
 echo Loading contracts data set into database.
@@ -60,7 +60,7 @@ echo Loading contracts data set into database. >>pipeline.log
 echo ================================================================= >>pipeline.log
 
 PROJECTS_FILE=$DATA_STORAGE'/project_data.csv'
-wget http://search.worldbank.org/api/projects/all.csv -O $PROJECTS_FILE >> pipeline.log
+#wget http://search.worldbank.org/api/projects/all.csv -O $PROJECTS_FILE >> pipeline.log
 
 #Cleaning the project data
 echo Cleaning projects data set.
@@ -73,7 +73,7 @@ echo ================================================================= >>pipelin
 
 
 #sudo chmod a+x+r+w $PROJECTS_FILE
-python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/data_cleaning_generic.py' -f $PROJECTS_FILE -o $PROJECTS_FILE >> pipeline.log
+#python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/data_cleaning_generic.py' -f $PROJECTS_FILE -o $PROJECTS_FILE >> pipeline.log
 
 #Loading the project data to the PostgreSQL database
 echo Loading projects data set into database
@@ -118,7 +118,7 @@ echo ================================================================= >>pipelin
 echo Generating contract features  >>pipeline.log
 echo ================================================================= >>pipeline.log
 FEATURE_GEN_1_FILE=$DATA_STORAGE'/latest_contract_web_download_cleaned_feature_gen1.csv'
-python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/contracts_feature_gen.py' -f $ENTITY_RESOLVED_CONTRACTS_FILE -p procurement_method -wf $FEATURE_GEN_1_FILE -ppp $CURRENCY_FILE_PPP -fcrf $CURRENCY_FILE_FCRF >> pipeline.log
+#python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/contracts_feature_gen.py' -f $ENTITY_RESOLVED_CONTRACTS_FILE -p procurement_method -wf $FEATURE_GEN_1_FILE -ppp $CURRENCY_FILE_PPP -fcrf $CURRENCY_FILE_FCRF >> pipeline.log
 
 #Adding Labels Data Set
 ###Cleaning the investigation data
@@ -147,15 +147,6 @@ echo ================================================================= >>pipelin
 echo Loading labeled feature gen 1 data set  >>pipeline.log
 echo ================================================================= >>pipeline.log
 
-LABELED_FEATURES_TABLE='labeled_contracts_cleaned_resolved_feature_gen_1'
-echo drop table \"$LABELED_FEATURES_TABLE\"';' > droptable.sql
-psql world_bank -f droptable.sql >> pipeline.log 2>> pipeline.log
-csvsql -i postgresql $LABELED_CONTRACTS_FEATURE_GEN_1 > createtable.sql
-psql world_bank -f createtable.sql >> pipeline.log 2>> pipeline.log
-echo \\copy \"$LABELED_FEATURES_TABLE\" FROM \'$LABELED_CONTRACTS_FEATURE_GEN_1\' CSV HEADER';' > copydata.sql
-psql world_bank -f copydata.sql >> pipeline.log 2>> pipeline.log
-
-
 
 #Generating supplier features for allegations
 echo Generating supplier features for allegations data set.
@@ -171,7 +162,7 @@ echo Generating ranked list of allegations.
 echo ================================================================= >>pipeline.log
 echo generating allegations ranked list  >>pipeline.log
 echo ================================================================= >>pipeline.log
-TRAINING_TABLE_NAME='labeled_contracts_cleaned_resolved_feature_gen_1'
+TRAINING_TABLE_NAME='labeled_contracts_cleaned_resolved_feature_gen_1_alleg'
 RANKED_LIST_OF_ALLEGATIONS_FILE_NAME=$DATA_STORAGE'/prioritzed_allegations_to_investigate.csv'
 python -W ignore $LOCALPATH'/WorldBank2015/Code/modeling/predict.py' -tf $TRAINING_TABLE_NAME -fl $LOCALPATH'/WorldBank2015/Code/modeling/feature_sets_log.yaml' -train_id $TABLE_ID_FOR_STORING_ALLEGATION_FEATURES -wf $RANKED_LIST_OF_ALLEGATIONS_FILE_NAME>>pipeline.log
 
