@@ -7,6 +7,11 @@ DATA_STORAGE='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-D
 CURRENCY_FILE_PPP='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015/pipeline_data/ppp.csv'
 CURRENCY_FILE_FCRF='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015/pipeline_data/fcrf.csv'
 echo Starting DSSG2015 World Bank Complaint Ranking Pipeline
+
+#Setting Python Path
+export PATH="/home/dssg/anaconda/bin":$PATH
+export PYTHONPATH="/home/dssg/anaconda":$PYTHONPATH
+echo $PYTHONPATH
 ### Data Loading ###
 ## Contracts ##
 #Download a new set of contracts from the World Bank Website 
@@ -15,7 +20,7 @@ echo ================================================================= >pipeline
 echo Downloading newest contracts data set from finances.worldbank.org. >>pipeline.log
 echo ================================================================= >>pipeline.log
 CONTRACTS_FILE=$DATA_STORAGE'/latest_contract_web_download.csv'
-#wget --output-document=$CONTRACTS_FILE https://finances.worldbank.org/api/views/kdui-wcs3/rows.csv?accessType=DOWNLOAD >> pipeline.log
+wget --output-document=$CONTRACTS_FILE https://finances.worldbank.org/api/views/kdui-wcs3/rows.csv?accessType=DOWNLOAD >> pipeline.log
 
 #Cleaning the contracts: formating dates, renaming columns, properly coding null values
 echo Cleaning contracts data set
@@ -23,7 +28,7 @@ echo ================================================================= >>pipelin
 echo Cleaning contracts data set >>pipeline.log
 echo ================================================================= >>pipeline.log
 CLEANED_CONTRACTS_FILE=$DATA_STORAGE'/latest_contract_web_download_cleaned.csv'
-#python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/data_cleaning_script.py' -f $CONTRACTS_FILE -n '#' -r "Borrower Country,country,Total Contract Amount (USD),amount" -o $CLEANED_CONTRACTS_FILE >> pipeline.log
+python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/data_cleaning_script.py' -f $CONTRACTS_FILE -n '#' -r "Borrower Country,country,Total Contract Amount (USD),amount" -o $CLEANED_CONTRACTS_FILE >> pipeline.log
 
 #Entity Resolution Application
 echo Resolving entities in contracts data set.
@@ -33,7 +38,7 @@ echo Resolving entities in contracts data set. >>pipeline.log
 echo ================================================================= >>pipeline.log
 CANONICAL_FILE=$DATA_STORAGE'/canonicalNamesV2.csv'
 ENTITY_RESOLVED_CONTRACTS_FILE=$DATA_STORAGE'/latest_contract_web_download_cleaned_resolved.csv'
-#python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/entity_resolution/entity_resolution.py' -c $CLEANED_CONTRACTS_FILE -e $CANONICAL_FILE -o $ENTITY_RESOLVED_CONTRACTS_FILE >> pipeline.log
+python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/entity_resolution/entity_resolution.py' -c $CLEANED_CONTRACTS_FILE -e $CANONICAL_FILE -o $ENTITY_RESOLVED_CONTRACTS_FILE >> pipeline.log
 
 #Loading contract data into PostgreSQL database
 echo Loading contracts data set into database.
@@ -60,7 +65,7 @@ echo Loading contracts data set into database. >>pipeline.log
 echo ================================================================= >>pipeline.log
 
 PROJECTS_FILE=$DATA_STORAGE'/project_data.csv'
-#wget http://search.worldbank.org/api/projects/all.csv -O $PROJECTS_FILE >> pipeline.log
+wget http://search.worldbank.org/api/projects/all.csv -O $PROJECTS_FILE >> pipeline.log
 
 #Cleaning the project data
 echo Cleaning projects data set.
@@ -73,7 +78,7 @@ echo ================================================================= >>pipelin
 
 
 #sudo chmod a+x+r+w $PROJECTS_FILE
-#python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/data_cleaning_generic.py' -f $PROJECTS_FILE -o $PROJECTS_FILE >> pipeline.log
+python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/data_cleaning_generic.py' -f $PROJECTS_FILE -o $PROJECTS_FILE >> pipeline.log
 
 #Loading the project data to the PostgreSQL database
 echo Loading projects data set into database
@@ -118,7 +123,7 @@ echo ================================================================= >>pipelin
 echo Generating contract features  >>pipeline.log
 echo ================================================================= >>pipeline.log
 FEATURE_GEN_1_FILE=$DATA_STORAGE'/latest_contract_web_download_cleaned_feature_gen1.csv'
-#python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/contracts_feature_gen.py' -f $ENTITY_RESOLVED_CONTRACTS_FILE -p procurement_method -wf $FEATURE_GEN_1_FILE -ppp $CURRENCY_FILE_PPP -fcrf $CURRENCY_FILE_FCRF >> pipeline.log
+python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/contracts_feature_gen.py' -f $ENTITY_RESOLVED_CONTRACTS_FILE -p procurement_method -wf $FEATURE_GEN_1_FILE -ppp $CURRENCY_FILE_PPP -fcrf $CURRENCY_FILE_FCRF >> pipeline.log
 
 #Adding Labels Data Set
 ###Cleaning the investigation data
@@ -155,7 +160,9 @@ echo generating supplier features for allegations  >>pipeline.log
 echo ================================================================= >>pipeline.log
 
 TABLE_ID_FOR_STORING_ALLEGATION_FEATURES='alleg'
-python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/feature_loop.py' -cf $FEATURE_GEN_1_FILE -if $LABELED_CONTRACTS_FEATURE_GEN_1 -id $TABLE_ID_FOR_STORING_ALLEGATION_FEATURES>> pipeline.log
+PATH_TO_SUPPLIER_FEATURE_GEN=$LOCALPATH'/WorldBank2015/Code/data_pipeline_src/supplier_feature_gen.py'
+
+python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/feature_loop.py' -cf $FEATURE_GEN_1_FILE -if $LABELED_CONTRACTS_FEATURE_GEN_1 -id $TABLE_ID_FOR_STORING_ALLEGATION_FEATURES -path $PATH_TO_SUPPLIER_FEATURE_GEN >> pipeline.log
 
 #Generating ranked list of complaints based on model.
 echo Generating ranked list of allegations.
