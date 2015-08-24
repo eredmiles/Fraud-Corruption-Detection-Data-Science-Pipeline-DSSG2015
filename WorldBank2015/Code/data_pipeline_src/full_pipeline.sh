@@ -6,6 +6,9 @@ LOCALPATH='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG
 DATA_STORAGE='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015/pipeline_data'
 CURRENCY_FILE_PPP='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015/pipeline_data/ppp.csv'
 CURRENCY_FILE_FCRF='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015/pipeline_data/fcrf.csv'
+PATH_TO_SUPPLIER_FEATURE_GEN=$LOCALPATH'/WorldBank2015/Code/data_pipeline_src/supplier_feature_gen.py'
+
+
 echo Starting DSSG2015 World Bank Complaint Ranking Pipeline
 
 #Setting Python Path
@@ -159,10 +162,7 @@ echo ================================================================= >>pipelin
 echo generating supplier features for allegations  >>pipeline.log
 echo ================================================================= >>pipeline.log
 
-TABLE_ID_FOR_STORING_ALLEGATION_FEATURES='alleg'
-PATH_TO_SUPPLIER_FEATURE_GEN=$LOCALPATH'/WorldBank2015/Code/data_pipeline_src/supplier_feature_gen.py'
-
-python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/feature_loop.py' -cf $FEATURE_GEN_1_FILE -if $LABELED_CONTRACTS_FEATURE_GEN_1 -id $TABLE_ID_FOR_STORING_ALLEGATION_FEATURES -path $PATH_TO_SUPPLIER_FEATURE_GEN >> pipeline.log
+TABLE_ID_FOR_STORING_ALLEGATION_FEATURES='alleg'python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/feature_loop.py' -cf $FEATURE_GEN_1_FILE -if $LABELED_CONTRACTS_FEATURE_GEN_1 -id $TABLE_ID_FOR_STORING_ALLEGATION_FEATURES -path $PATH_TO_SUPPLIER_FEATURE_GEN >> pipeline.log
 
 #Generating ranked list of complaints based on model.
 echo Generating ranked list of allegations.
@@ -180,7 +180,7 @@ echo generating supplier features for contracts  >>pipeline.log
 echo ================================================================= >>pipeline.log
 
 TABLE_ID_FOR_STORING_CONTRACTS_FEATURES='cntrcts'
-python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/feature_loop.py' -cf $FEATURE_GEN_1_FILE -if $FEATURE_GEN_1_FILE -id $TABLE_ID_FOR_STORING_CONTRACTS_FEATURES>> pipeline.log
+python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/feature_loop.py' -cf $FEATURE_GEN_1_FILE -if $FEATURE_GEN_1_FILE -id $TABLE_ID_FOR_STORING_CONTRACTS_FEATURES -path $PATH_TO_SUPPLIER_FEATURE_GEN >> pipeline.log
 
 #Generating ranked list of contracts in the last N years based on model.
 echo Generating ranked list of contracts.
