@@ -158,7 +158,8 @@ echo ================================================================= >>pipelin
 echo generating supplier features for allegations  >>pipeline.log
 echo ================================================================= >>pipeline.log
 
-TABLE_ID_FOR_STORING_ALLEGATION_FEATURES='alleg'python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/feature_loop.py' -cf $FEATURE_GEN_1_FILE -if $LABELED_CONTRACTS_FEATURE_GEN_1 -id $TABLE_ID_FOR_STORING_ALLEGATION_FEATURES -path $PATH_TO_SUPPLIER_FEATURE_GEN >> pipeline.log
+TABLE_ID_FOR_STORING_ALLEGATION_FEATURES='alleg'
+python -W ignore $LOCALPATH'/WorldBank2015/Code/data_pipeline_src/feature_loop.py' -cf $FEATURE_GEN_1_FILE -if $LABELED_CONTRACTS_FEATURE_GEN_1 -id $TABLE_ID_FOR_STORING_ALLEGATION_FEATURES -path $PATH_TO_SUPPLIER_FEATURE_GEN >> pipeline.log
 
 #Generating ranked list of complaints based on model.
 echo Generating ranked list of allegations.
