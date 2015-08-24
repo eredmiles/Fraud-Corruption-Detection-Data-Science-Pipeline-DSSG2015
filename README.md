@@ -1,6 +1,6 @@
 #SETUP INSTRUCTIONS
 - Git clone https://github.com/eredmiles/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015.git
-- 
+
 You will run full_pipeline.sh to do EVERYTHING!
 
 - Install Anaconda python (see instructions [here](http://docs.continuum.io/anaconda/install#linux-install)
