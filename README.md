@@ -1,10 +1,7 @@
 #Detecting Fraud, Corruption and Collusion in World Bank Contracts - Data Science for Social Good Summer 2015 Fellowship at the University of Chicago
 
 ##PROJECT OVERVIEW
-![Logo](dssg_logo.PNG)
-
-###Project Description
-The DSSG World Bank project is a multi-year project focused on detecting fraud, collusion and corruption in the World Bank contracts. Corruption is the biggest impediment to economic growth in 60+ developing countries and drains about $900+ billion from the developing world every year. 
+This project focused on detecting fraud, collusion and corruption in the World Bank contracts. Corruption is the biggest impediment to economic growth in 60+ developing countries and drains about $900+ billion from the developing world every year.
 
 The World Bank Group loans money to developing countries so that they can undertake infrastructure and development projects. During this money loaning process, countries post RFPs (requests for proposals or bids) and contractors submit bids. Winning companies which are awarded a contract subsequently begin work and begin to bill for that work. Occasionally, during the bidding and billing process, companies may engage in corrupt behavior. The World Bank Group currently relies on complaints  and the domain expertise of contract investigators to identify wrong-doing. 
 
