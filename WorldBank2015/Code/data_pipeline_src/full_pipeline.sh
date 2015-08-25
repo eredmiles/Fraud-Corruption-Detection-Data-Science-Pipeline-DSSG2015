@@ -186,7 +186,7 @@ echo generating contracts ranked lists  >>pipeline.log
 echo ================================================================= >>pipeline.log
 TRAINING_TABLE_NAME='labeled_contracts_cleaned_resolved_feature_gen_1_alleg'
 PREDICTING_TABLE_NAME='latest_contract_web_download_cleaned_feature_gen1_cntrcts'
-OUTPUT_FILE_NAME=$DATA_STORAGE'/prioritized_contracts_to_investigate_for_'
+OUTPUT_FILE_NAME=$DATA_STORAGE'/ranked_contracts_to_investigate_for_'
 python -W ignore $LOCALPATH'/WorldBank2015/Code/modeling/prediction_loop.py' -tf $TRAINING_TABLE_NAME -pf $PREDICTING_TABLE_NAME -fl $LOCALPATH'/WorldBank2015/Code/modeling/feature_sets_log.yaml' -train_id $TABLE_ID_FOR_STORING_ALLEGATION_FEATURES -pred_id $TABLE_ID_FOR_STORING_CONTRACTS_FEATURES -path $LOCALPATH'/WorldBank2015/Code/modeling/predict.py' -fp $OUTPUT_FILE_NAME >>pipeline.log
 
 

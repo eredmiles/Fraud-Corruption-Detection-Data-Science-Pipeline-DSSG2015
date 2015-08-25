@@ -199,6 +199,10 @@ def main():
 	print output_table_array
 	output_table = output_table_array[len(output_table_array)-1]
     output_df.to_csv(output_file,encoding='utf-8') 
+
+    if len(output_table) > 63:
+        output_table = output_table[:63]
+
     output_df.to_sql(output_table,engine,if_exists='replace')
         
 #    grouped.to_sql('contract_set_w_prediction_nocountries',engine,if_exists='replace')
