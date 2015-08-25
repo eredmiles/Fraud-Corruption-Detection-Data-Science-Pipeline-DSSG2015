@@ -1,4 +1,17 @@
-#SETUP INSTRUCTIONS
+#Detecting Fraud, Corruption and Collusion in World Bank Contracts - Data Science for Social Good Summer 2015 Fellowship at the University of Chicago
+
+##PROJECT OVERVIEW
+This project focused on detecting fraud, collusion and corruption in the World Bank contracts. Corruption is the biggest impediment to economic growth in 60+ developing countries and drains about $900+ billion from the developing world every year.
+
+The World Bank Group loans money to developing countries so that they can undertake infrastructure and development projects. During this money loaning process, countries post RFPs (requests for proposals or bids) and contractors submit bids. Winning companies which are awarded a contract subsequently begin work and begin to bill for that work. Occasionally, during the bidding and billing process, companies may engage in corrupt behavior. The World Bank Group currently relies on complaints  and the domain expertise of contract investigators to identify wrong-doing. 
+
+The DSSG team built data science models using machine learning techniques to:
+- Prioritize complaints by using historical records of past World Bank - contracts and investigation results.
+- Pro-actively identify contracts to investigate in addition to relying on complaints.
+
+##SETUP INSTRUCTIONS
+To Install from Source Code contained in this directory - please follow the instructions below.
+
 - Git clone https://github.com/eredmiles/Fraud-Corruption-Detection-Data-Science-Pipeline-DSSG2015.git
 
 You will run full_pipeline.sh to do EVERYTHING!
@@ -36,5 +49,15 @@ NOTE: This is also where all output files will be stored.
     - you must also modify model_pipeline_script.py (line 86) and supplier_feature_gen.py (line 217): create_engine(r'postgresql://[USER_NAME]:'+password+'localhost/DATABASE'. e.g. create_engine(r'postgresql://dssg:'+password+'localhost/world_bank'
     - you must create a config file in the directory from which you will run the script.
 
-#Code Authors
-Emily Grace (emily.grace.eg@gmail.com), Ankit Rai (rai5@illinois.edu), Elissa Redmiles (eredmiles@cs.umd.edu). [DSSG](https://dssg.io)2015.
+Note: there is a script entitled environment_setup.sh this sets the PATH and PYTHONPATH variables. This script may or may not be necessary for successful installation depending on your machine. If not necessary, leave this file empty.
+
+##Authors
+<img src="http://dssg.io/img/people/Grace.jpg" alt="picture of emily" height="100px" width="100px"/>|<img src="http://dssg.io/img/people/Rai.jpg" alt="picture of ankit"  height="100px" width="100px"/>|<img src="http://dssg.io/img/people/Redmiles.png" alt="picture of elissa"  height="100px" width="100px"/>
+-------------------------------|--------------------------------------------|------------------------------------------------
+Emily Grace | [Ankit Rai](https://www.linkedin.com/pub/ankit-rai/14/836/116) | [Elissa Redmiles](https://cs.umd.edu/~eredmiles)
+Princeton University | University of Illinois Urbana-Champaign | University of Maryland
+Ph.D. Candidate in Physics | Ph.D. Student in Informatics | Ph.D. Student in Computer Science
+Contact: emily.grace.eg@gmail.com | Contact: rai5@illinois.edu | Contact: eredmiles@cs.umd.edu
+
+##Licensing
+All contents are covered under an MIT license. See the LICENSE file in this directory for further information.
