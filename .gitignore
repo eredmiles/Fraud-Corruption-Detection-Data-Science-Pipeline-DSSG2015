@@ -1,7 +1,8 @@
 *.pyc
 *~
 *.sql
-*log*
+*.log
+*-log*
 config
 WorldBank2015/Code/data_pipeline_src/features_and_outcomes.csv
 WorldBank2015/Code/data_pipeline_src/test.csv
