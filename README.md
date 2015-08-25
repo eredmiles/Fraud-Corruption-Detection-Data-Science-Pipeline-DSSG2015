@@ -49,6 +49,8 @@ NOTE: This is also where all output files will be stored.
     - you must also modify model_pipeline_script.py (line 86) and supplier_feature_gen.py (line 217): create_engine(r'postgresql://[USER_NAME]:'+password+'localhost/DATABASE'. e.g. create_engine(r'postgresql://dssg:'+password+'localhost/world_bank'
     - you must create a config file in the directory from which you will run the script.
 
+Note: there is a script entitled environment_setup.sh this sets the PATH and PYTHONPATH variables. This script may or may not be necessary for successful installation depending on your machine. If not necessary, leave this file empty.
+
 ##Authors
 <img src="http://dssg.io/img/people/Grace.jpg" alt="picture of emily" height="100px" width="100px"/>|<img src="http://dssg.io/img/people/Rai.jpg" alt="picture of ankit"  height="100px" width="100px"/>|<img src="http://dssg.io/img/people/Redmiles.png" alt="picture of elissa"  height="100px" width="100px"/>
 -------------------------------|--------------------------------------------|------------------------------------------------
