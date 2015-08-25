@@ -10,9 +10,9 @@ CURRENCY_FILE_FCRF='/home/dssg/dssg/Fraud-Corruption-Detection-Data-Science-Pipe
 PATH_TO_SUPPLIER_FEATURE_GEN=$LOCALPATH'/WorldBank2015/Code/data_pipeline_src/supplier_feature_gen.py'
 
 
-DATE=`date + "%m_%d_%Y_%H_%"`
-STDOUT_LOG='pipeline'$DATE'.log'
-ERROR_LOG='pipeline_error'$DATE'.log'
+DATE=`date +"%m%d%Y_%H%M"`
+STDOUT_LOG='pipeline_'$DATE'.log'
+ERROR_LOG='pipeline_error_'$DATE'.log'
 echo $STDOUT_LOG
 echo $ERROR_LOG
 
