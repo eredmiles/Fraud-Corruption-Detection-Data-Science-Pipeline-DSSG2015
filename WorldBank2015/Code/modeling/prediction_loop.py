@@ -21,7 +21,7 @@ con = engine.connect()
 contracts_data = pd.read_sql(args.training_table,engine)
 count =0
 #print contracts_data['allegation_category']
-for allegation_type in contracts_data['allegation_category']:
+for allegation_type in contracts_data['allegation_category'].unique():
 	count = count+1
         allegation_type_for_file_name=allegation_type.replace(" ","_").lower()	
 	allegation_type_for_file_name = allegation_type_for_file_name.replace('\\','').replace('.','').replace('/','')
